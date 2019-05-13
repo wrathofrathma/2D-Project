@@ -5,3 +5,17 @@
 # c o texture_id image1_path image2_path image3_path image4_path image5_path image6_path
 # c & s define whether it's asingle texure or cubemap. a and o define whether to load it with alpha properties or repeating properties.
 # Let's avoid spaces because I'm lazy.
+
+s o flesh1 fleshwall1.png
+s o flesh2 fleshwall2.png
+s o flesh3 fleshwall3.png
+s o flesh4 fleshwall4.png
+s o flesh5 fleshwall5.png
+s o grass1 grass1.png
+s o hidden1 hidden1.png
+s o hidden2 hidden2.png
+s o rock1 rock.png 
+
+s o r_idle idle.png
+s o r_move1 move1.png
+s o r_move2 move2.png

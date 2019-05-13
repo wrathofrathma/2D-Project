@@ -36,8 +36,7 @@
 \brief Enum describing whether our camera is free or orbital.
 */
 enum CAMERA_TYPE {
-  FREE,
-  SPHERICAL
+  FREE
 };
 
 /**

@@ -4,7 +4,7 @@
 #include "src/Graphics.hpp"
 #include "src/UserInput.hpp"
 #include <random>
-
+#include "src/scenes/Project.hpp"
 using namespace std;
 
 
@@ -96,6 +96,8 @@ int main(){
 	yuki.ui->addMouseMovedEvent(moveEvent);
 	yuki.ui->addKeyStateEvent(stateProcessing);
 
-
+	yuki.addScene("2d", new ProjectScene(&yuki));
+	yuki.setActiveScene("2d");
+	yuki.run();
 	return 0;
 }
