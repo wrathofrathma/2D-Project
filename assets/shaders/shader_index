@@ -1,0 +1,7 @@
+# This is our shader index file.
+# Any lines starting with # are considered comments and therefor ignored.
+# For now we're going to stick with incredibly basic functionality and follow a format
+# shader_id vertex_shader fragment_shader
+# Let's avoid spaces because I'm lazy.
+
+Default Default.vs Default.fs

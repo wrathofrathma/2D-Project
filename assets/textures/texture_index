@@ -1,0 +1,7 @@
+# This is our texture index file.
+# Any lines starting with # are considered comments and therefor ignored.
+# For now we're going to stick with incredibly basic functionality and follow a format
+# s a texture_id image_path
+# c o texture_id image1_path image2_path image3_path image4_path image5_path image6_path
+# c & s define whether it's asingle texure or cubemap. a and o define whether to load it with alpha properties or repeating properties.
+# Let's avoid spaces because I'm lazy.
