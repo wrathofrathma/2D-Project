@@ -23,8 +23,8 @@ Camera::Camera(unsigned int width, unsigned int height, float FoV = 50.0f){
   this->FoV = FoV;
 
 
-  clip_near = 0.1;
-  clip_far = 200.0f;
+  clip_near = -1;
+  clip_far = 1.0f;
 
   updateProjection();
 }
@@ -53,7 +53,10 @@ void Camera::resize(unsigned int width, unsigned int height){
 \brief Updates the projection matrix using glm::perspective.
 */
 void Camera::updateProjection(){
-  projection = glm::perspective(glm::radians(FoV), float(width) / float(height), clip_near, clip_far);
+//  projection = glm::perspective(glm::radians(FoV), float(width) / float(height), clip_near, clip_far);
+   //projection = glm::ortho(-4/3.0f, 4/3.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+   projection = glm::ortho(0.0f, float(width), 0.0f, float(height), -2.0f, 2.0f);
+  //projection = glm::ortho(-1, 1, -1, 1, -1, 1);
 }
 
 /**
@@ -68,12 +71,8 @@ glm::mat4 Camera::getView(){
 glm::mat4 Camera::getProjection(){
   return projection;
 }
-/**
-\brief Returns the camera type. FREE or SPHERICAL
-*/
-CAMERA_TYPE Camera::getType(){
-  return type;
-}
+
+
 /**
 \brief Applies the camera's projection & view matrices to the shader.
 \param shader --- Shader to apply changes to.

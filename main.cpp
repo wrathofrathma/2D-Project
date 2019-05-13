@@ -17,8 +17,8 @@ void moveEvent(sf::Event::MouseMoveEvent event, Yuki *yu){
 		float delta_y = event.y - last_pos.y;
 		float x = delta_x * mouse_sensitivity.x;
 		float y = delta_y * mouse_sensitivity.y;
-		if(yu->getActiveScene()->getCamera()->getType()==FREE)
-			((FreeCamera*)(yu->getActiveScene()->getCamera()))->rotate(glm::vec3(-x,-y, 0));
+		// if(yu->getActiveScene()->getCamera()->getType()==FREE)
+		// 	((OrthoCamera*)(yu->getActiveScene()->getCamera()))->rotate(glm::vec3(-x,-y, 0));
 	}
 	ui->setMousePos(sf::Vector2i(event.x, event.y));
 }
@@ -34,20 +34,6 @@ void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 		case sf::Keyboard::F10:
 			yu->ge->screenshot();
 			break;
-		case sf::Keyboard::F11:
-			{
-			Scene* s = yu->getActiveScene();
-			if(s!=nullptr)
-				s->setActiveCamera("Sphere");
-			}
-			break;
-		case sf::Keyboard::F12:
-			{
-			Scene* s = yu->getActiveScene();
-			if(s!=nullptr)
-				s->setActiveCamera("Free");
-			}
-			break;
 	  default:
 			break;
 	};
@@ -59,31 +45,35 @@ void stateProcessing(Yuki *yu){
 	Scene* scene = yu->getActiveScene();
 	Camera* camera = scene->getCamera();
 
-	if(camera->getType() == FREE){
-		FreeCamera* c = (FreeCamera*)camera;
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
+	OrthoCamera* c = (OrthoCamera*)scene->getCamera();
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
 
+	}
+	else{
+		//Camera translations
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+			cout << "Moving up" << endl;
+			c->translate(glm::vec3(0,m,0));
 		}
-		else{
-			//Camera translations
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-				c->translate(glm::vec3(0,0,-m));
-			}
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-				c->translate(glm::vec3(-m,0,0));
-			}
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-				c->translate(glm::vec3(0,0,m));
-			}
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-				c->translate(glm::vec3(m,0,0));
-			}
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
-				c->translate(glm::vec3(0,-m,0));
-			}
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-				c->translate(glm::vec3(0,m,0));
-			}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+			cout << "Moving left" << endl;
+			c->translate(glm::vec3(-m,0,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+			cout << " Moving down" << endl;
+			c->translate(glm::vec3(0,-m,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+			cout << "Moving right" << endl;
+			c->translate(glm::vec3(m,0,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+			cout << "Moving down" << endl;
+			c->translate(glm::vec3(0,-m,0));
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+			cout << "Moving up" << endl;
+			c->translate(glm::vec3(0,m,0));
 		}
 	}
 }

@@ -82,11 +82,11 @@ void GraphicsEngine::toggleWireframe(){
 \brief Draws the current scene and prints any OpenGL errors.
 \param scene --- Scene to draw.
 */
-void GraphicsEngine::display(Scene *scene){
+void GraphicsEngine::display(Scene *scene, float delta){
 	glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if(scene!=nullptr){
-		scene->draw();
+		scene->draw(delta);
 	}
 	sf::RenderWindow::display();
 	printOpenGLErrors();

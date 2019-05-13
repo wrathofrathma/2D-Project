@@ -2,9 +2,14 @@
 #define PROJECT_HPP
 
 #include "../graphics/Scene.hpp"
+
+class Robot;
+#include "Terrain.hpp"
+#include "Tile.hpp"
 class ProjectScene : public Scene {
   private:
-
+    Terrain terrain;
+    Tile background;
   public:
     ProjectScene(Yuki* yuki);
     ~ProjectScene();
@@ -14,7 +19,7 @@ class ProjectScene : public Scene {
     //Shader logic called every tick.
     void updateShaders();
     //Scene draw function.
-    void draw();
+    void draw(float delta);
     void resize(unsigned int w, unsigned int h);
     //Functions that will determine how our scene handles input.
     void keyPressedEventHandler(sf::Event::KeyEvent event);

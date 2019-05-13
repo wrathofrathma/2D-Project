@@ -41,18 +41,13 @@ Scene::~Scene(){
 
 This is called every iteration in the primary game loop.
 */
-void Scene::tick(){
-  //Generate delta
-  sf::Time curr_time = clock.getElapsedTime();
-  sf::Time delta = curr_time - last_time;
-  float dt = delta.asSeconds();
-  last_time = curr_time;
+void Scene::tick(float delta){
   //Generate camera updates
   Camera *c = getCamera();
   if(c!=nullptr)
     c->update();
   updateShaders();
-  update(dt);
+  update(delta);
 }
 
 /**

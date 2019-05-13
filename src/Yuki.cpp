@@ -67,8 +67,8 @@ void Yuki::checkOpenGL(){
 	//Straight up yoinked most of this from my graphics professor's code. It seems useful.
 	GLint MinMajor = 3;
 	GLint MinMinor = 3;
-	GLint WindowWidth = 800;
-	GLint WindowHeight = 600;
+	GLint WindowWidth = 1280;
+	GLint WindowHeight = 720;
 
 	//Make a test window requesting OpenGL version 10.10 and seeing what it falls back to.
 	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "OpenGL Setup", sf::Style::Default, sf::ContextSettings(24, 8, 4, 10, 10, sf::ContextSettings::Core));
@@ -131,12 +131,18 @@ void Yuki::init(){
 Calls the active scene's tick() function to update game logic, and processes input before calling the graphics engine to render everything.
 */
 void Yuki::run(){
+	last_time = clock.getElapsedTime();
 	while(ge->isOpen()){
+		sf::Time curr_time = clock.getElapsedTime();
+		sf::Time delta = curr_time - last_time;
+		float dt = delta.asSeconds();
+		last_time = curr_time;
+
 		Scene *s = getActiveScene();
-		s->tick();
+		s->tick(dt);
 		if(ui!=nullptr)
-			ui->processInput(s);
-		ge->display(s);
+			ui->processInput(s,dt);
+		ge->display(s,dt);
 	}
 }
 /**

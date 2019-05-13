@@ -28,7 +28,9 @@ Virtual destructor with nothing to cleanup.
 QuaternionObject::~QuaternionObject(){
 
 }
-
+void QuaternionObject::setScale(glm::vec3 value){
+  current_scale = value;
+}
 /**
 \brief Adds rotation value to our object's rotation.
 \param rotation --- glm::vec3 containing the rotation in radians to apply to each axis.
@@ -113,7 +115,7 @@ glm::mat4 QuaternionObject::generateModelMatrix(){
 /**
 \brief Multiplicatively scales the object size.
 \param s --- The scale to apply to the object.
-*/ 
+*/
 void QuaternionObject::scale(glm::vec3 s){
   current_scale*=s;
 }

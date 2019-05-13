@@ -66,7 +66,7 @@ sf::Vector2f UI::getMouseSensitivity(){
 Calls all stored key pressed, mouse moved, mouse button, and key state callback functions registered to the UI and the related functions in the scene.
 \param scene --- The current scene to process input for. Typically the active scene.
 */
-void UI::processInput(Scene *scene){
+void UI::processInput(Scene *scene, float delta){
 	sf::Event event;
 	while(yuki->ge->pollEvent(event)){
 		if(event.type == sf::Event::Closed){

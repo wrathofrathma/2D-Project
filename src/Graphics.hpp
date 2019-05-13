@@ -27,7 +27,7 @@
 
 //Cameras
 #include "graphics/cameras/Camera.hpp"
-#include "graphics/cameras/FreeCamera.hpp"
+#include "graphics/cameras/OrthoCamera.hpp"
 
 //Drawables
 #include "graphics/drawables/Polygon.hpp"

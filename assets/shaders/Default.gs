@@ -2,9 +2,7 @@
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
 
-layout(location = 0) in vec4 vpos;
-layout(location = 1) in vec3 vnormal;
-layout(location = 2) in vec3 vcolor;
+layout(location = 0) in vec2 vpos;
 layout(location = 3) in vec2 text_uv;
 
 in vec4 vert_pos;

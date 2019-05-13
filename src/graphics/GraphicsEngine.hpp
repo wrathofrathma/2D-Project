@@ -45,10 +45,10 @@ class GraphicsEngine : public sf::RenderWindow {
 		Yuki *yuki; ///< Yuki game engine pointer.
 		sf::Clock clock; ///< Graphics engine clock.
 	public:
-		GraphicsEngine(Yuki* yu, std::string title="", GLint MajorVersion = 3, GLint MinorVersion = 3, int width=800, int height = 600);
+		GraphicsEngine(Yuki* yu, std::string title="", GLint MajorVersion = 3, GLint MinorVersion = 3, int width=1280, int height = 720);
 		~GraphicsEngine();
 		void setResizeFlag();
-		void display(Scene *s);
+		void display(Scene *s, float delta);
 		void screenshot();
 		void resize();
 		void setSize(unsigned int w, unsigned int h);

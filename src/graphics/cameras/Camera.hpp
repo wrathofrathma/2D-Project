@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include <SFML/System.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 
@@ -32,14 +31,6 @@
 */
 
 /**
-\enum CAMERA_TYPE
-\brief Enum describing whether our camera is free or orbital.
-*/
-enum CAMERA_TYPE {
-  FREE
-};
-
-/**
 \class Camera
 \brief Base level class for any camera objects.
 
@@ -48,7 +39,6 @@ Manages the projection and view matrix as well as position of the camera.
 
 class Camera : virtual public SpacialObject {
   protected:
-    CAMERA_TYPE type; ///< Enum containing the type of camera, free or spherical/orbital.
 
     float FoV; ///< Field of view.
     float clip_near; ///< Near clipping distance.
@@ -69,7 +59,6 @@ class Camera : virtual public SpacialObject {
     void updateProjection();
     virtual void updateView() = 0;
     virtual void update() = 0;
-    CAMERA_TYPE getType();
 };
 
 #endif

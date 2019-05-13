@@ -53,7 +53,8 @@ class Yuki {
 		~Yuki();
 		void run();
 		void close();
-
+		sf::Time last_time; ///< Time variable containing our last measured time for delta calculations.
+    sf::Clock clock; ///< Clock for determining delta value between updates.
 		AssetManager *am;	///< Pointer to our Asset Manager
 		GraphicsEngine *ge;	///< Pointer to our Graphics Engine
 		UI *ui; ///< Pointer to our input class.

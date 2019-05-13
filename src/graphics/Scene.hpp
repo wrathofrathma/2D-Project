@@ -48,13 +48,13 @@ class Scene {
   public:
     Scene(Yuki* yuki);
     virtual ~Scene();
-    void tick(); //Handles pre-update events such as calcing delta time and updating camera matrices.
+    void tick(float delta); //Handles pre-update events such as calcing delta time and updating camera matrices.
     //Scene logic function.
     virtual void update(float delta)=0;
     //Shader logic called every tick.
     virtual void updateShaders()=0;
     //Scene draw function.
-    virtual void draw()=0;
+    virtual void draw(float delta)=0;
     virtual void resize(unsigned int w, unsigned int h);
     //Functions that will determine how our scene handles input.
     virtual void keyPressedEventHandler(sf::Event::KeyEvent event);

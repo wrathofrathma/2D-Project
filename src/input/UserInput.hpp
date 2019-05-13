@@ -43,7 +43,7 @@ class UI {
 		UI(Yuki *yu);
 		~UI();
 
-		void processInput(Scene *scene);
+		void processInput(Scene *scene, float delta);
 
 		//Adding things to our input-event loop check.
 		void addKeyPressedEvent(void (*callback)(sf::Event::KeyEvent event, Yuki *yu));
