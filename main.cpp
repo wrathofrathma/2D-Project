@@ -45,31 +45,7 @@ void stateProcessing(Yuki *yu){
 	Scene* scene = yu->getActiveScene();
 	Camera* camera = scene->getCamera();
 
-	OrthoCamera* c = (OrthoCamera*)scene->getCamera();
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
 
-	}
-	else{
-		//Camera translations
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-			c->translate(glm::vec3(0,m,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-			c->translate(glm::vec3(-m,0,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-			c->translate(glm::vec3(0,-m,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-			c->translate(glm::vec3(m,0,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
-			c->translate(glm::vec3(0,-m,0));
-		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-			c->translate(glm::vec3(0,m,0));
-		}
-	}
 }
 
 

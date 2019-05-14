@@ -11,6 +11,13 @@ class ProjectScene : public Scene {
     Terrain terrain;
     Tile background;
     Robot robot;
+    static constexpr float max_horizontal_velocity = 5;
+    static constexpr float max_vertical_velocity = 20;
+    static constexpr float horizontal_acceleration =0.5;
+    static constexpr float jump_acceleration = 10;
+    static constexpr float gravity = 2;
+    static constexpr float PPM = 32;
+    float last_move;
   public:
     ProjectScene(Yuki* yuki);
     ~ProjectScene();
@@ -28,6 +35,8 @@ class ProjectScene : public Scene {
     void mouseButtonEventHandler(sf::Event::MouseButtonEvent event);
     void mouseMoveEventHandler(sf::Event::MouseMoveEvent event);
 
+    glm::vec2 getMouseCoord();
+    sf::Vector2i getWorldPosition(glm::vec2);
 };
 
 #endif

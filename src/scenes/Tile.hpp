@@ -41,6 +41,7 @@ class Tile : public QuaternionObject {
     virtual void update(float delta);
     void setActive(bool value);
     void setID(int id);
+    bool getActive();
 };
 
 #endif

@@ -23,6 +23,7 @@ void Terrain::init(AssetManager *am){
   loadTextures();
   world = World(WORLD_HEIGHT);
   generate();
+  
 }
 void Terrain::loadTextures(){
   if(am!=nullptr){

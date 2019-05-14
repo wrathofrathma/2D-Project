@@ -15,7 +15,7 @@ Robot::Robot(){
     -BODY_X/2.0f, -BODY_Y/2.0f, 0, // bottom left
     -BODY_X/2.0f, BODY_Y/2.0f, 0 // top left
   };
-
+  velocity = glm::vec2(0);
   vertices = std::vector<float>(vp, vp+12);
   //Vertex indices
   unsigned int vi[] = { 0, 1, 3, 1, 2, 3 };
@@ -65,6 +65,7 @@ void Robot::init(AssetManager *am){
   a.push_back(am->getTexture("r_idle"));
   animations.insert(std::make_pair(idle, a));
   animations.insert(std::make_pair(falling, a));
+  animations.insert(std::make_pair(jumping, a));
 
   shader = am->getShader("Default");
   if(shader!=nullptr){
@@ -75,6 +76,17 @@ void Robot::init(AssetManager *am){
   head.translate(glm::vec3(0,BODY_Y-11.5,0));
 }
 
+void Robot::move(glm::vec2 value){
+  translate(glm::vec3(value.x, value.y, 0),false);
+  head.translate(glm::vec3(value.x, value.y, 0),false);
+}
+
+void Robot::setState(ROBOT_STATE s){
+  state = s;
+}
+ROBOT_STATE Robot::getState(){
+  return state;
+}
 void Robot::draw(float delta){
   head.draw(delta);
   if(shader!=nullptr){
@@ -99,5 +111,11 @@ void Robot::draw(float delta){
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
   }
+}
 
+void Robot::calcHeadRotation(glm::vec2 value){
+  //We need to calculate the directional vector between the head center and the mouse.
+  glm::vec3 head_pos = head.getPosition();
+  double angle = atan2(value.y - head_pos.y, value.x - head_pos.x);
+  head.setOrientation(glm::vec3(0,0,angle));
 }
