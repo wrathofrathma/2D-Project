@@ -2,7 +2,7 @@
 
 
 
-in vec2 frag_pos; ///< Fragment position
+in vec4 frag_pos; ///< Fragment position
 in vec2 tex_coord; ///< Texture coordinates.
 
 out vec4 FragColor; ///< Our resulting color.

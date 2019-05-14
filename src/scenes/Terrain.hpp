@@ -11,21 +11,38 @@
 class AssetManager;
 class Texture;
 
-typedef std::vector<std::vector<Tile>> World;
+enum TILE_IDS{
+  flesh,
+  grass,
+  rock
+};
 
+
+static constexpr int WORLD_WIDTH = 128;
+static constexpr int WORLD_HEIGHT = 64;
+
+typedef std::vector<Tile> WORLD_ROW;
+typedef std::vector<WORLD_ROW> World;
 class Terrain {
-    std::map<std::string, Texture*> textures; ///< Our terrain textures.
+    std::map<TILE_IDS, std::vector<Texture*>> textures; ///< Our terrain textures.
     unsigned int seed;
     void loadTextures();
     AssetManager *am;
     World world;
-    Tile t;
-
+    std::map<TILE_IDS, std::pair<int,int>> TILE_BOUNDS;
+    Tile empty_tile;
   public:
     Terrain(AssetManager* am = nullptr);
     void generate();
     void init(float size);
     void draw(float delta);
     void init(AssetManager* am);
+    std::vector<TILE_IDS> getPossibleTiles(int y);
+
+    Tile getTile(int x, int y);
 };
+
+
+
+
 #endif

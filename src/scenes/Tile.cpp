@@ -2,7 +2,9 @@
 #include "../graphics/Shader.hpp"
 
 #include "../graphics/Texture.hpp"
-Tile::Tile(float size){
+Tile::Tile(float size, bool active){
+  this->active = active;
+  id = -1;
   vPosition = 0;
   vTexture = 1;
   useTexture = false;
@@ -56,7 +58,9 @@ Tile::~Tile(){
   glGenBuffers(1, &dataPtr);
   glGenBuffers(1, &indicePtr);
 }
-
+void Tile::setActive(bool value){
+  active = value;
+}
 void Tile::setShader(Shader *s){
   this->shader = s;
   if(shader!=nullptr){
@@ -65,7 +69,13 @@ void Tile::setShader(Shader *s){
   }
 }
 
+void Tile::setID(int id){
+  this->id = id;
+}
 void Tile::draw(float delta){
+  if(!active){
+    return;
+  }
   update(delta);
   if(shader!=nullptr){
     generateModelMatrix();

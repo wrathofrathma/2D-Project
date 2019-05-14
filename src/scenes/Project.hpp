@@ -3,13 +3,14 @@
 
 #include "../graphics/Scene.hpp"
 
-class Robot;
 #include "Terrain.hpp"
 #include "Tile.hpp"
+#include "Robot.hpp"
 class ProjectScene : public Scene {
   private:
     Terrain terrain;
     Tile background;
+    Robot robot;
   public:
     ProjectScene(Yuki* yuki);
     ~ProjectScene();

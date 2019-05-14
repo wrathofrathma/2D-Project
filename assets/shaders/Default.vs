@@ -14,7 +14,6 @@ out vec2 tex_coord; ///< Texture coordinates.
 void main(){
   frag_pos = model * vec4(vpos,1); // Converting to world position.
   tex_coord = text_uv;
-//  gl_Position = proj * view * model * vec4(vpos,1,1);
-//  gl_Position = proj* view * model * vec4(vpos,1);
-gl_Position = proj * view* model * vec4(vpos,1);
+
+  gl_Position = proj * view* model * vec4(vpos,1);
 }

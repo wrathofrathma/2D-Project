@@ -40,7 +40,7 @@ void keyPressedEvent(sf::Event::KeyEvent event, Yuki *yu){
 }
 
 void stateProcessing(Yuki *yu){
-	float m = 0.5; //Move sensitivity.
+	float m = 2; //Move sensitivity.
 
 	Scene* scene = yu->getActiveScene();
 	Camera* camera = scene->getCamera();
@@ -52,27 +52,21 @@ void stateProcessing(Yuki *yu){
 	else{
 		//Camera translations
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-			cout << "Moving up" << endl;
 			c->translate(glm::vec3(0,m,0));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-			cout << "Moving left" << endl;
 			c->translate(glm::vec3(-m,0,0));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-			cout << " Moving down" << endl;
 			c->translate(glm::vec3(0,-m,0));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-			cout << "Moving right" << endl;
 			c->translate(glm::vec3(m,0,0));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
-			cout << "Moving down" << endl;
 			c->translate(glm::vec3(0,-m,0));
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-			cout << "Moving up" << endl;
 			c->translate(glm::vec3(0,m,0));
 		}
 	}

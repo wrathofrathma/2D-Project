@@ -8,14 +8,14 @@ ProjectScene::ProjectScene(Yuki* yuki) : Scene(yuki){
   int y = yuki->ge->getSize().y;
   addCamera("default", new OrthoCamera(x, y, 50));
   setActiveCamera("default");
-
+  getCamera()->setPosition(glm::vec3(64,30,1));
   terrain.init(yuki->am);
   background.setShader(yuki->am->getShader("Default"));
-  //background.scale(glm::vec3(200,200,1));
   background.setPosition(glm::vec3(x/2.0,y/2.0,-1));
   background.setScale(glm::vec3(yuki->ge->getSize().x, yuki->ge->getSize().y,1));
   background.addTexture("background", yuki->am->getTexture("background"));
-
+  background.setActive(true);
+  robot.init(yuki->am);
 }
 
 ProjectScene::~ProjectScene(){
@@ -39,12 +39,13 @@ void ProjectScene::updateShaders(){
 
 //Scene draw function.
 void ProjectScene::draw(float delta){
+  robot.draw(delta);
+
   terrain.draw(delta);
 
-  glm::mat4 viewMat = glm::mat4(glm::mat3(getCamera()->getView()));
-  yuki->am->getShader("Default")->setMat4("view", viewMat);
-  background.draw(delta);
-
+   glm::mat4 viewMat = glm::mat4(glm::mat3(getCamera()->getView()));
+   yuki->am->getShader("Default")->setMat4("view", viewMat);
+   background.draw(delta);
 }
 
 void ProjectScene::resize(unsigned int w, unsigned int h){
