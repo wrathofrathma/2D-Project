@@ -118,5 +118,6 @@ void Robot::calcHeadRotation(glm::vec2 value){
   //We need to calculate the directional vector between the head center and the mouse.
   glm::vec3 head_pos = head.getPosition();
   double angle = atan2(value.y - head_pos.y, value.x - head_pos.x);
+
   head.setOrientation(glm::vec3(0,0,angle));
 }

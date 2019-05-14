@@ -5,7 +5,7 @@
 #include "../AssetManager.hpp"
 #include "../UserInput.hpp"
 ProjectScene::ProjectScene(Yuki* yuki) : Scene(yuki){
-  global_ambient = glm::vec4(40.0/255.0, 54.0/255.0, 98.0/255.0, 1);
+  global_ambient = glm::vec4(30.0/255.0, 44.0/255.0, 88.0/255.0, 1);
   int x = yuki->ge->getSize().x;
   int y = yuki->ge->getSize().y;
   addCamera("default", new OrthoCamera(x, y, 50));
@@ -190,8 +190,6 @@ glm::vec2 ProjectScene::getMouseCoord(){
   sf::Vector2i screen_coords = sf::Mouse::getPosition(*yuki->ge);
   glm::vec3 camera_pos = getCamera()->getPosition();
   glm::vec2 world_pos = glm::vec2(camera_pos.x + screen_coords.x, camera_pos.y + (yuki->ge->getSize().y - screen_coords.y));
-  std::cout << "Mouse to World: " << world_pos.x << " " << world_pos.y << std::endl;
-  std::cout << "Tile: " << getWorldPosition(glm::vec2(world_pos)).x << " " <<getWorldPosition(glm::vec2(world_pos)).y << std::endl;
   return world_pos;
 }
 

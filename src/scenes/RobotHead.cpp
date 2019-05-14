@@ -83,8 +83,14 @@ void RobotHead::draw(float delta){
     shader->setMat4(uModel, model_matrix);
     shader->setBool("use_texture", true);
     shader->setBool("use_lighting", true);
-    float angle = orientation.z * M_PI/180;
+    float angle = orientation.z;
+    if(angle < 0){
+      angle = fabs(2*M_PI + angle);
+    }
+    glm::vec3 eye_pos = glm::vec3(head_radius * std::cos(angle),head_radius * std::sin(angle),0);
+    eye_pos += position;
 
+    shader->setVec3("eye_pos", eye_pos);
     shader->setFloat("eye_angle", angle);
     shader->setVec3("head_pos",position);
     if(texture!=nullptr){
