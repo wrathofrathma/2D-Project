@@ -8,8 +8,6 @@ RobotHead::RobotHead(){
   vPosition = 0;
   vTexture = 1;
   shader = nullptr;
-  // setScale(glm::vec3(head_radius*2, head_radius*2, 1));
-  setPosition(glm::vec3(100,100,0));
   int divisions = 24;
   float angle_mult = (2*M_PI)/divisions;
 
@@ -72,6 +70,10 @@ RobotHead::~RobotHead(){
 void RobotHead::init(AssetManager *am){
   texture = am->getTexture("r_head");
   shader = am->getShader("Default");
+  if(shader!=nullptr){
+    shader->bind();
+    uModel = shader->getUniformLocation("model");
+  }
 }
 
 void RobotHead::draw(float delta){

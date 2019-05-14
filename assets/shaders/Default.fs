@@ -15,8 +15,11 @@ uniform vec3 camera_pos; ///< Camera position.
 
 void main()
 {
-  if(useTexture)
+  if(useTexture){
     FragColor =  texture(texture1, tex_coord);
+    if(FragColor.a<0.2)
+      discard;
+  }
   else
     FragColor = vec4(0.5,0.2,0.7,1);
 }

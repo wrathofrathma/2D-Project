@@ -72,6 +72,7 @@ void Tile::setShader(Shader *s){
 void Tile::setID(int id){
   this->id = id;
 }
+
 void Tile::draw(float delta){
   if(!active){
     return;
