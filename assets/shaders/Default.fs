@@ -64,6 +64,4 @@ void main()
   }
   else
     FragColor *= global_ambient;
-
-
 }

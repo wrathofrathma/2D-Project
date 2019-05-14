@@ -40,7 +40,6 @@ class Robot : public QuaternionObject {
     std::map<ROBOT_STATE, Animation> animations;
     int animation_step;
     float animation_delta;
-    RobotHead head;
     void loadTextures();
   public:
     Robot();
@@ -52,6 +51,8 @@ class Robot : public QuaternionObject {
     glm::vec2 velocity;
     void setState(ROBOT_STATE s);
     ROBOT_STATE getState();
+    RobotHead head;
+
 };
 
 #endif

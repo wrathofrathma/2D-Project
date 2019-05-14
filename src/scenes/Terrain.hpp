@@ -30,7 +30,6 @@ class Terrain {
     AssetManager *am;
     World world;
     std::map<TILE_IDS, std::pair<int,int>> TILE_BOUNDS;
-    Tile empty_tile;
   public:
     Terrain(AssetManager* am = nullptr);
     void generate();
@@ -41,6 +40,8 @@ class Terrain {
     Tile getTileAtCoord(float x, float y);
     Tile getTile(int x, int y);
     void deleteTile(int x, int y);
+    Tile empty_tile;
+
 };
 
 

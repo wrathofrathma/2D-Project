@@ -93,7 +93,6 @@ void ProjectScene::update(float delta){
     stop_drop=true;
   }
 
-
   robot.move(glm::vec2(robot.velocity*PPM*delta));
   c->translate(glm::vec3(robot.velocity.x*PPM*delta , robot.velocity.y*PPM*delta, 0));
 
@@ -106,7 +105,11 @@ void ProjectScene::update(float delta){
     robot.velocity.y = 0;
   }
 
+  if((robot.getState()!=falling && robot.getState()!=jumping) && robot.velocity.x!=0 && robot.velocity.y ==0){
+    robot.setState(moving);
+  }
 
+  std::cout << "STATE " << robot.getState() << std::endl;
 }
 
 //Shader logic called every tick.
@@ -179,11 +182,19 @@ void ProjectScene::keyStateEventHandler(){
 }
 
 void ProjectScene::mouseButtonEventHandler(sf::Event::MouseButtonEvent event){
+  glm::vec2 mpos = getMouseCoord();
+  sf::Vector2i tile_loc = getWorldPosition(mpos);
+  glm::vec2 robot_pos = glm::vec2(robot.head.getPosition().x, robot.head.getPosition().y);
+
   if(event.button == sf::Mouse::Button::Left){
-    glm::vec2 mpos = getMouseCoord();
-    sf::Vector2i tile_loc = getWorldPosition(mpos);
-    terrain.deleteTile(tile_loc.x, tile_loc.y);
+    sf::Vector2i intersect = getFirstIntersection(robot_pos, mpos);
+    if(intersect.x!=-1 && intersect.y!=-1){
+      Tile t = terrain.getTile(intersect.x, intersect.y);
+      if(t.getActive())
+        terrain.deleteTile(intersect.x, intersect.y);
+    }
   }
+  getWorldIntersections(robot_pos, mpos);
 }
 
 glm::vec2 ProjectScene::getMouseCoord(){
@@ -202,4 +213,97 @@ void ProjectScene::mouseMoveEventHandler(sf::Event::MouseMoveEvent event){
   sf::Vector2f mouse_sensitivity = ui->getMouseSensitivity();
 
   robot.calcHeadRotation(getMouseCoord());
+}
+
+
+
+std::vector<sf::Vector2i> ProjectScene::getWorldIntersections(glm::vec2 start, glm::vec2 end){
+  std::vector<glm::vec2> pixel_intersections = getLineIntersections(start, end);
+  std::vector<sf::Vector2i> tile_intersections;
+  std::map<std::pair<int,int>,bool> intersects;
+  for(glm::vec2 pi : pixel_intersections){
+    sf::Vector2i wpos = getWorldPosition(pi);
+    std::pair<int,int> p = std::make_pair(wpos.x, wpos.y);
+    if(intersects.count(p)==0){
+      tile_intersections.push_back(wpos);
+      intersects.insert(std::make_pair(p,true));
+    }
+  }
+  return tile_intersections;
+}
+/**
+\brief This function applies Bresenham's line algorithm to implement raycasting into the scene
+
+Returns a vector of every vec2 tile in world coordinates that the line intersected.
+\param start --- vec2 starting vector
+\param end --- vec2 ending vector
+*/
+std::vector<glm::vec2> ProjectScene::getLineIntersections(glm::vec2 start, glm::vec2 end){
+  std::vector<glm::vec2> intersections;
+  float delta_x = end.x - start.x;
+  float delta_y = std::abs(end.y - start.y);
+  int x0 = start.x;
+  int x1 = end.x;
+  int y0 = start.y;
+  int y1 = end.y;
+
+  bool steep = std::abs(end.y - start.y) > std::abs(end.x - start.x);
+  if(steep){
+      int buf = x0;
+      x0 = y0;
+      y0 = buf;
+  }
+  if(x0 > x1){
+    int buf = x0;
+    x0 = x1;
+    x1 = buf;
+    buf = y0;
+    y0 = y1;
+    y1 = buf;
+  }
+  int e = 0;
+  int ystep = 0;
+  int y = y0;
+  if(y0 < y1)
+    ystep = 1;
+  else
+    ystep = -1;
+  for(int x=x0; x<=x1; x++){
+    if(steep)
+      intersections.push_back(glm::vec2(y,x));
+    else
+      intersections.push_back(glm::vec2(x,y));
+    e+=delta_y;
+    if(2*e >= delta_x){
+      y+= ystep;
+      e-= delta_x;
+    }
+  }
+
+  //
+  // for(int x = start.x; x < end.x; x++){
+  //   if(D > 0){
+  //     cy++;
+  //     delta-=2*dx;
+  //     intersections.push_back(glm::vec2(int(x),int(cy)));
+  //   }
+  //   delta = delta+2*dy;
+  // }
+
+  return intersections;
+}
+sf::Vector2i ProjectScene::getFirstIntersection(glm::vec2 start, glm::vec2 end){
+  std::vector<sf::Vector2i> intersections = getWorldIntersections(start,end);
+  for(sf::Vector2i i : intersections){
+    Tile t = terrain.getTile(i.x, i.y);
+    if(t.getActive())
+      return i;
+  }
+  return sf::Vector2i(-1,-1);
+}
+
+Tile ProjectScene::getFirstTile(glm::vec2 start, glm::vec2 end){
+  sf::Vector2i intersect = getFirstIntersection(start,end);
+
+  return terrain.getTile(intersect.x, intersect.y);
 }

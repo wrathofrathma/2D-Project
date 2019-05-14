@@ -40,6 +40,11 @@ class ProjectScene : public Scene {
 
     glm::vec2 getMouseCoord();
     sf::Vector2i getWorldPosition(glm::vec2);
+    std::vector<glm::vec2> getLineIntersections(glm::vec2 start, glm::vec2 end);
+    std::vector<sf::Vector2i> getWorldIntersections(glm::vec2 start, glm::vec2 end);
+    Tile getFirstTile(glm::vec2 start, glm::vec2 end);
+    sf::Vector2i getFirstIntersection(glm::vec2 start, glm::vec2 end);
+
 };
 
 #endif
