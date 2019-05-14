@@ -19,7 +19,7 @@ class ProjectScene : public Scene {
     static constexpr float PPM = 32;
 
 
-
+    glm::vec4 radial_lighting;
     float last_move;
   public:
     ProjectScene(Yuki* yuki);

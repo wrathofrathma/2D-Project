@@ -2,8 +2,11 @@
 #include "../graphics/Shader.hpp"
 
 #include "../graphics/Texture.hpp"
+
+
 Tile::Tile(float size, bool active){
   this->active = active;
+  use_lighting = true;
   id = -1;
   vPosition = 0;
   vTexture = 1;
@@ -77,7 +80,9 @@ bool Tile::getActive(){
 void Tile::setID(int id){
   this->id = id;
 }
-
+void Tile::setUseLighting(bool use){
+  use_lighting = use;
+}
 void Tile::draw(float delta){
   if(!active){
     return;
@@ -87,7 +92,8 @@ void Tile::draw(float delta){
     generateModelMatrix();
     shader->bind();
     shader->setMat4(uModel, model_matrix);
-    shader->setBool("useTexture", useTexture);
+    shader->setBool("use_texture", useTexture);
+    shader->setBool("use_lighting", use_lighting);
     if(useTexture){
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, textures[active_texture]->getID());

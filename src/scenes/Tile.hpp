@@ -30,7 +30,7 @@ class Tile : public QuaternionObject {
     bool useTexture; ///< Tracks whether we're using textures or just colors. Is used to set a uniform in our shader to toggle texure vs color rendering.
     bool active; ///< Is this tile active or air?
     int id; ///< The tile's id for what object it is.
-
+    bool use_lighting; ///< Does this tile apply lighting calculations?
   public:
     Tile(float size=1, bool active=true);
     ~Tile();
@@ -44,6 +44,7 @@ class Tile : public QuaternionObject {
     void setID(int id);
     bool getActive();
     int getID();
+    void setUseLighting(bool use);
 };
 
 #endif

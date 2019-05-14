@@ -81,7 +81,12 @@ void RobotHead::draw(float delta){
     generateModelMatrix();
     shader->bind();
     shader->setMat4(uModel, model_matrix);
-    shader->setBool("useTexture", true);
+    shader->setBool("use_texture", true);
+    shader->setBool("use_lighting", true);
+    float angle = orientation.z * M_PI/180;
+
+    shader->setFloat("eye_angle", angle);
+    shader->setVec3("head_pos",position);
     if(texture!=nullptr){
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, texture->getID());

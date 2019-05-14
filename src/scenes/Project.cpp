@@ -5,6 +5,7 @@
 #include "../AssetManager.hpp"
 #include "../UserInput.hpp"
 ProjectScene::ProjectScene(Yuki* yuki) : Scene(yuki){
+  global_ambient = glm::vec4(40.0/255.0, 54.0/255.0, 98.0/255.0, 1);
   int x = yuki->ge->getSize().x;
   int y = yuki->ge->getSize().y;
   addCamera("default", new OrthoCamera(x, y, 50));
@@ -15,12 +16,13 @@ ProjectScene::ProjectScene(Yuki* yuki) : Scene(yuki){
   background.setPosition(glm::vec3(x/2.0,y/2.0,-1));
   background.setScale(glm::vec3(yuki->ge->getSize().x, yuki->ge->getSize().y,1));
   background.addTexture("background", yuki->am->getTexture("background"));
+  background.setUseLighting(false);
   background.setActive(true);
   robot.init(yuki->am);
   robot.move(glm::vec2(yuki->ge->getSize().x/2.0,yuki->ge->getSize().y/2.0));
   robot.move(glm::vec2(WORLD_WIDTH*PPM/2, WORLD_HEIGHT*PPM/2));
   getCamera()->setPosition(glm::vec3(WORLD_WIDTH*PPM/2, WORLD_HEIGHT*PPM/2,0));
-  glEnable(GL_LIGHTING);
+
 }
 
 ProjectScene::~ProjectScene(){
@@ -114,6 +116,7 @@ void ProjectScene::updateShaders(){
     if(camera!=nullptr){
       camera->applyUpdate(val);
     }
+    val->setVec4("global_ambient", global_ambient);
   }
 }
 
