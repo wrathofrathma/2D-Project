@@ -22,16 +22,14 @@
 //Components
 #include "graphics/components/SpacialObject.hpp"
 #include "graphics/components/QuaternionObject.hpp"
-#include "graphics/components/Light.hpp"
-#include "graphics/components/Drawable.hpp"
+
 
 //Cameras
 #include "graphics/cameras/Camera.hpp"
 #include "graphics/cameras/OrthoCamera.hpp"
 
 //Drawables
-#include "graphics/drawables/Polygon.hpp"
-#include "graphics/drawables/Quad.hpp"
+
 
 //Premade Lights
 #include "graphics/Scene.hpp"

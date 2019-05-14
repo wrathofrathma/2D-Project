@@ -20,6 +20,7 @@ ProjectScene::ProjectScene(Yuki* yuki) : Scene(yuki){
   robot.move(glm::vec2(yuki->ge->getSize().x/2.0,yuki->ge->getSize().y/2.0));
   robot.move(glm::vec2(WORLD_WIDTH*PPM/2, WORLD_HEIGHT*PPM/2));
   getCamera()->setPosition(glm::vec3(WORLD_WIDTH*PPM/2, WORLD_HEIGHT*PPM/2,0));
+  glEnable(GL_LIGHTING);
 }
 
 ProjectScene::~ProjectScene(){
@@ -29,75 +30,79 @@ ProjectScene::~ProjectScene(){
 
 void ProjectScene::update(float delta){
   OrthoCamera* c = (OrthoCamera*)getCamera();
-  glm::vec3 robo_pos = robot.getPosition();
-  sf::Vector2i tile_coord = getWorldPosition(glm::vec2(robo_pos.x, robo_pos.y));
+  //Starting positions of everything.
+  glm::vec3 cpos = c->getPosition();
+  glm::vec3 center_pos = robot.getPosition();
+  glm::vec2 foot_pos = glm::vec2(center_pos.x, center_pos.y - 21);
+  glm::vec2 head_pos = glm::vec2(center_pos.x, center_pos.y + 41);
+  glm::vec2 body_r = glm::vec2(center_pos.x + 15, center_pos.y);
+  glm::vec2 body_l = glm::vec2(center_pos.x - 15, center_pos.y);
+
+  //Converted to world tile coordinates.
+  sf::Vector2i foot_tile = getWorldPosition(glm::vec2(foot_pos.x, foot_pos.y));
+  sf::Vector2i head_tile = getWorldPosition(glm::vec2(head_pos.x, head_pos.y));
+
+
+
+
+  //std::cout << t.getID() << std::endl;
   last_move+=delta;
-  if(last_move>0.2f){
+  if(last_move>0.1f){
     robot.velocity.x = 0;
   }
-  std::cout << "Velocity: " << robot.velocity.x << " " << robot.velocity.y << std::endl;
-  bool moved = false;
-  Tile below = terrain.getTile(tile_coord.x, tile_coord.y-1);
-  if(!below.getActive() && robot.getState()!=falling){
+
+  Tile below = terrain.getTile(foot_tile.x, foot_tile.y);
+
+  //Acceleration section. If there is no block immediately stopping us, we proceed.
+  //If we're not jumping and there is nothing below us, we're falling.
+  if(!below.getActive() && robot.getState()!=jumping)
     robot.setState(falling);
-    robot.velocity.y-=gravity;
-  }
-  //Movement logic.
-  if(robot.velocity.y > 0){
-    //Chekc stuff above head height and apply gravity.
-    Tile above = terrain.getTile(tile_coord.x, tile_coord.y+1);
-    if(above.getActive()){
-      robot.velocity.y = 0;
-      robot.setState(falling);
-    }
+  //If we're jumping or falling then apply gravity if we haven't hit terminal velocity.
+  if((robot.getState()==falling || robot.getState()==jumping) && robot.velocity.y > (-max_vertical_velocity))
+    robot.velocity.y -= gravity;
+  //If we've peaked at our jump(upward velocity evening out), then we start falling
+  if(robot.velocity.y < 0)
+    robot.setState(falling);
 
+
+  glm::vec2 new_center = glm::vec2(center_pos.x, center_pos.y) + (robot.velocity * PPM * delta);
+
+  sf::Vector2i new_left_pos = getWorldPosition(glm::vec2(new_center.x - 15, new_center.y));
+  sf::Vector2i new_right_pos = getWorldPosition(glm::vec2(new_center.x + 15, new_center.y));
+  sf::Vector2i new_head_pos = getWorldPosition(glm::vec2(new_center.x, new_center.y+41));
+  if(terrain.getTile(new_left_pos.x, new_left_pos.y).getActive() && robot.velocity.x < 0){
+    robot.velocity.x = 0;
   }
-  else if(robot.velocity.y < 0){
-    if(below.getActive() && robot.getState()!=jumping){
-      robot.velocity = glm::vec2(robot.velocity.x, 0);
-      robot.setState(idle);
-    }
+  if(terrain.getTile(new_right_pos.x, new_right_pos.y).getActive() && robot.velocity.x > 0){
+    robot.velocity.x = 0;
+  }
+  if(terrain.getTile(new_head_pos.x, new_head_pos.y).getActive() && robot.velocity.y > 0){
+    robot.velocity.y = 0;
+  }
+  //Movement logic. We'll basically check to see where we are after the move, and if it violates any boundaries we compute the distance to the top of the tile.
+  //And use that value instead.
+  bool stop_drop = false;
+  glm::vec2 new_foot = foot_pos + (robot.velocity * PPM * delta);
+  sf::Vector2i new_foot_tile = getWorldPosition(glm::vec2(new_foot.x, new_foot.y));
+  if(terrain.getTile(new_foot_tile.x, new_foot_tile.y).getActive()){
+    //Let's calculate the needed translation to just land us on the top.
+    float ydiff = new_foot_tile.y*32+16 - foot_pos.y;
+    robot.velocity.y = ydiff;
+    stop_drop=true;
   }
 
-  if(robot.velocity.x > 0){
-    moved = true;
-    //Moving right.
-    Tile right = terrain.getTile(tile_coord.x+1, tile_coord.y);
-    Tile right_upper = terrain.getTile(tile_coord.x+1, tile_coord.y+1);
-    if(right_upper.getActive()){
-      //If there is a tile at head level to teh right, our velocity stops
-      robot.velocity = glm::vec2(0,robot.velocity.y);
-    }
-    else if(right.getActive()){
-      //if there is no tile to the upper right, but one to our right, then we need to apply an upwards velocity if one doesn't exist.
-      if(robot.velocity.y==0){
-        robot.move(glm::vec2(0,PPM));
-        c->translate(glm::vec3(0,PPM,0));
-      }
-    }
-  }
-  else if(robot.velocity.x < 0){
-    bool moved = false;
-    Tile left = terrain.getTile(tile_coord.x-1, tile_coord.y);
-    Tile left_upper = terrain.getTile(tile_coord.x-1, tile_coord.y+1);
-    if(left_upper.getActive()){
-      robot.velocity.x = 0;
-    }
-    else if(left.getActive()){
-      if(robot.velocity.y==0){
-        robot.move(glm::vec2(0,PPM));
-        c->translate(glm::vec3(0,PPM,0));
-      }
-    }
-  }
-  if(moved && robot.getState()==idle){
-    robot.setState(moving);
-  }
-  else if(!moved && robot.getState()==moving)
+
+  robot.move(glm::vec2(robot.velocity*PPM*delta));
+  c->translate(glm::vec3(robot.velocity.x*PPM*delta , robot.velocity.y*PPM*delta, 0));
+
+  //State logic
+  if(robot.getState()!=jumping && robot.velocity.x==0)
     robot.setState(idle);
 
-  robot.move(glm::vec2(robot.velocity));
-  c->translate(glm::vec3(robot.velocity.x*PPM*delta , robot.velocity.y*PPM*delta, 0));
+  if(stop_drop){
+    robot.setState(idle);
+    robot.velocity.y = 0;
+  }
 
 
 }
@@ -137,7 +142,7 @@ void ProjectScene::keyPressedEventHandler(sf::Event::KeyEvent event){
 void ProjectScene::keyStateEventHandler(){
   glm::vec2 velocity(0);
   glm::vec3 robot_pos = robot.getPosition();
-  sf::Vector2i robot_world_pos = getWorldPosition(glm::vec2(robot_pos.x, robot_pos.y));
+  sf::Vector2i robot_world_pos = getWorldPosition(glm::vec2(robot_pos.x, robot_pos.y-10));
   OrthoCamera* c = (OrthoCamera*)getCamera();
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
 
@@ -171,18 +176,24 @@ void ProjectScene::keyStateEventHandler(){
 }
 
 void ProjectScene::mouseButtonEventHandler(sf::Event::MouseButtonEvent event){
+  if(event.button == sf::Mouse::Button::Left){
+    glm::vec2 mpos = getMouseCoord();
+    sf::Vector2i tile_loc = getWorldPosition(mpos);
+    terrain.deleteTile(tile_loc.x, tile_loc.y);
+  }
 }
 
 glm::vec2 ProjectScene::getMouseCoord(){
   sf::Vector2i screen_coords = sf::Mouse::getPosition(*yuki->ge);
   glm::vec3 camera_pos = getCamera()->getPosition();
   glm::vec2 world_pos = glm::vec2(camera_pos.x + screen_coords.x, camera_pos.y + (yuki->ge->getSize().y - screen_coords.y));
-  std::cout << world_pos.x << " " << world_pos.y << std::endl;
+  std::cout << "Mouse to World: " << world_pos.x << " " << world_pos.y << std::endl;
+  std::cout << "Tile: " << getWorldPosition(glm::vec2(world_pos)).x << " " <<getWorldPosition(glm::vec2(world_pos)).y << std::endl;
   return world_pos;
 }
 
 sf::Vector2i ProjectScene::getWorldPosition(glm::vec2 in){
-  sf::Vector2i tile_coord = sf::Vector2i(int(in.x+PPM)/PPM, int(in.y+PPM)/PPM);
+  sf::Vector2i tile_coord = sf::Vector2i((in.x+PPM/2.0)/PPM, int(in.y+PPM/2.0)/PPM);
   return tile_coord;
 }
 void ProjectScene::mouseMoveEventHandler(sf::Event::MouseMoveEvent event){

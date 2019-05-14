@@ -68,6 +68,9 @@ void Tile::setShader(Shader *s){
     uModel = shader->getUniformLocation("model");
   }
 }
+int Tile::getID(){
+  return id;
+}
 bool Tile::getActive(){
   return active;
 }

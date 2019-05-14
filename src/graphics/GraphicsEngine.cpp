@@ -3,7 +3,6 @@
 #include "Scene.hpp"
 #include "cameras/Camera.hpp"
 #include "../AssetManager.hpp"
-#include "components/Light.hpp"
 /**
 \file GraphicsEngine.cpp
 \brief Implementation of the GraphicsEngine class.

@@ -23,7 +23,7 @@ void Terrain::init(AssetManager *am){
   loadTextures();
   world = World(WORLD_HEIGHT);
   generate();
-  
+
 }
 void Terrain::loadTextures(){
   if(am!=nullptr){
@@ -126,6 +126,22 @@ void Terrain::draw(float delta){
   }
 }
 
+void Terrain::deleteTile(int x, int y){
+  if(x <0 || x >= WORLD_WIDTH)
+    return;
+  else if(y < 0 || y>= WORLD_HEIGHT)
+    return;
+  else
+    world[y][x].setActive(false);
+}
+
+Tile Terrain::getTileAtCoord(float x, float y){
+  if(x/32 <0 || x/32 >= WORLD_WIDTH)
+    return empty_tile;
+  else if(y/32 < 0 || y/32>= WORLD_HEIGHT)
+    return empty_tile;
+  return world[y/32][x/32];
+}
 Tile Terrain::getTile(int x, int y){
   if(x <0 || x >= WORLD_WIDTH)
     return empty_tile;

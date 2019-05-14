@@ -1,8 +1,6 @@
 #include "Scene.hpp"
 #include "../Yuki.hpp"
 #include "cameras/Camera.hpp"
-#include "components/Light.hpp"
-#include "components/Drawable.hpp"
 #include"../AssetManager.hpp"
 
 /**

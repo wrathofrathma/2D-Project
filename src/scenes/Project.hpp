@@ -15,8 +15,11 @@ class ProjectScene : public Scene {
     static constexpr float max_vertical_velocity = 20;
     static constexpr float horizontal_acceleration =0.5;
     static constexpr float jump_acceleration = 10;
-    static constexpr float gravity = 2;
+    static constexpr float gravity = 5;
     static constexpr float PPM = 32;
+
+
+
     float last_move;
   public:
     ProjectScene(Yuki* yuki);

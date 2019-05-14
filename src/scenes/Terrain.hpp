@@ -38,8 +38,9 @@ class Terrain {
     void draw(float delta);
     void init(AssetManager* am);
     std::vector<TILE_IDS> getPossibleTiles(int y);
-
+    Tile getTileAtCoord(float x, float y);
     Tile getTile(int x, int y);
+    void deleteTile(int x, int y);
 };
 
 
