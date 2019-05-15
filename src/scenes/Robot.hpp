@@ -41,6 +41,7 @@ class Robot : public QuaternionObject {
     int animation_step;
     float animation_delta;
     void loadTextures();
+    bool headlight;
   public:
     Robot();
     ~Robot();
@@ -52,6 +53,7 @@ class Robot : public QuaternionObject {
     void setState(ROBOT_STATE s);
     ROBOT_STATE getState();
     RobotHead head;
+    void toggleHeadlight();
 
 };
 

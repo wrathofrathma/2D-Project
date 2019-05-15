@@ -9,6 +9,7 @@ Robot::Robot(){
   shader = nullptr;
   animation_step = 0;
   //Vertex positions
+  headlight = true;
   float vp[] = {
     BODY_X/2.0f,  BODY_Y/2.0f, 0, // top right
     BODY_X/2.0f, -BODY_Y/2.0f, 0, // bottom right
@@ -49,23 +50,38 @@ Robot::Robot(){
 }
 
 Robot::~Robot(){
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &dataPtr);
-  glGenBuffers(1, &indicePtr);
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &dataPtr);
+  glDeleteBuffers(1, &indicePtr);
 }
 
+void Robot::toggleHeadlight(){
+  headlight = !headlight;
+}
 void Robot::init(AssetManager *am){
   Animation a;
   a.push_back(am->getTexture("r_move1"));
   a.push_back(am->getTexture("r_move2"));
-
+  a.push_back(am->getTexture("r_move3"));
   animations.insert(std::make_pair(moving, a));
   a.clear();
 
-  a.push_back(am->getTexture("r_idle"));
+  a.push_back(am->getTexture("r_idle1"));
+  a.push_back(am->getTexture("r_idle2"));
+  a.push_back(am->getTexture("r_idle3"));
   animations.insert(std::make_pair(idle, a));
-  animations.insert(std::make_pair(falling, a));
+  a.clear();
+
+  a.push_back(am->getTexture("r_jump1"));
+  a.push_back(am->getTexture("r_jump2"));
+  a.push_back(am->getTexture("r_jump3"));
   animations.insert(std::make_pair(jumping, a));
+  a.clear();
+
+  a.push_back(am->getTexture("r_fall1"));
+  a.push_back(am->getTexture("r_fall2"));
+  a.push_back(am->getTexture("r_fall3"));
+  animations.insert(std::make_pair(falling, a));
 
   shader = am->getShader("Default");
   if(shader!=nullptr){
@@ -95,6 +111,7 @@ void Robot::draw(float delta){
     shader->setMat4(uModel, model_matrix);
     shader->setBool("use_texture", true);
     shader->setBool("use_lighting", true);
+    shader->setBool("use_headlight", headlight);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, animations[state][animation_step]->getID());
     animation_delta+=delta;
