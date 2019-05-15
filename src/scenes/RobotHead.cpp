@@ -4,6 +4,22 @@
 #include "../graphics/Shader.hpp"
 #include "../graphics/Texture.hpp"
 
+
+/**
+\file RobotHead.cpp
+\brief Implementation file for RobotHead.hpp
+
+\author Christopher Arausa
+\version Final
+\date 05/14/2019
+*/
+
+/**
+\brief Constructor
+
+This constructor contains all of the logic for generating the head model. The circle is generated using pretty simple trig and the uv coordinates are also using trig as well.
+It also allocates and uploads the data to the graphics card.
+*/
 RobotHead::RobotHead(){
   vPosition = 0;
   vTexture = 1;
@@ -61,12 +77,22 @@ RobotHead::RobotHead(){
 
 }
 
+/**
+\brief Destructor
+
+Cleans up the data on the graphics card.
+*/
 RobotHead::~RobotHead(){
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &dataPtr);
-  glGenBuffers(1, &indicePtr);
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &dataPtr);
+  glDeleteBuffers(1, &indicePtr);
 }
 
+/**
+\brief Initializes the robot's shader and texture.
+
+\param am --- AssetManager class
+*/
 void RobotHead::init(AssetManager *am){
   texture = am->getTexture("r_head");
   shader = am->getShader("Default");
@@ -76,6 +102,11 @@ void RobotHead::init(AssetManager *am){
   }
 }
 
+/**
+\brief This function draws the head of our robot and uploads the eye position, head position, and angle to the gpu for lighting calculations.
+
+\param delta --- time since the last update. 
+*/
 void RobotHead::draw(float delta){
   if(shader!=nullptr){
     generateModelMatrix();

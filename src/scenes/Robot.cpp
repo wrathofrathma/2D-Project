@@ -1,6 +1,22 @@
 #include "Robot.hpp"
 #include "../AssetManager.hpp"
 #include "../graphics/Texture.hpp"
+
+/**
+\file Robot.cpp
+\brief Implementation file for the Robot class.
+
+\author Christopher Arausa
+\date 05/14/2019
+\version Final
+*/
+
+
+/**
+\brief Constructor
+
+This is the robot's constructor. It generates the body, texture uvs, vertices, and uploads them to the graphics card.
+*/
 Robot::Robot(){
   state = moving;
   vPosition = 0;
@@ -48,16 +64,29 @@ Robot::Robot(){
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
+/**
+\brief Destructor
 
+Cleans up GPU memory.
+*/
 Robot::~Robot(){
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &dataPtr);
   glDeleteBuffers(1, &indicePtr);
 }
 
+/**
+\brief This toggles our headlights on and off.
+*/
 void Robot::toggleHeadlight(){
   headlight = !headlight;
 }
+
+/**
+\brief This initializes our robot's animations and shaders once we have access to the AssetManager.
+
+\param am --- AssetManager class pointer.
+*/
 void Robot::init(AssetManager *am){
   Animation a;
   a.push_back(am->getTexture("r_move1"));
@@ -92,29 +121,49 @@ void Robot::init(AssetManager *am){
   head.translate(glm::vec3(0,BODY_Y-11.5,0));
 }
 
+/**
+\brief This moves our robot and head together.
+
+\param value --- glm::vec2 for the translation.
+*/
 void Robot::move(glm::vec2 value){
   translate(glm::vec3(value.x, value.y, 0),false);
   head.translate(glm::vec3(value.x, value.y, 0),false);
 }
-
+/**
+\brief This sets the state of our robot. Whether it's falling, jumping, idle, or moving.
+\param s --- ROBOT_STATE value to use.
+*/
 void Robot::setState(ROBOT_STATE s){
   state = s;
 }
+
+/**
+\brief This returns the current state of the robot.
+*/
 ROBOT_STATE Robot::getState(){
   return state;
 }
+/**
+\brief This function draws our robot and handles animation logic.
+\param delta --- Delta time since the last draw.
+*/
 void Robot::draw(float delta){
+
   head.draw(delta);
   if(shader!=nullptr){
+    //Generic initialization stuff.
     generateModelMatrix();
     shader->bind();
     shader->setMat4(uModel, model_matrix);
     shader->setBool("use_texture", true);
     shader->setBool("use_lighting", true);
     shader->setBool("use_headlight", headlight);
+    //So we can upload all of these to the GPU at once and use a uniform to toggle between them, but this is just what I went with.
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, animations[state][animation_step]->getID());
     animation_delta+=delta;
+    //I'm actually surprised at how easy it was to implement animations when I realized I could just map them to states.
     if(animation_delta > (animation_step+1)*(1.0f / animations[state].size())){
       animation_step++;
     }
@@ -131,6 +180,11 @@ void Robot::draw(float delta){
   }
 }
 
+/**
+\brief This calculates the robot's head rotation by taking in a vector, calculating the angle between the center of the head and that point, then using the arctangent of the two to get our rotation.
+
+\param value --- glm::vec2 the value our eye is looking at. Typically our mouse.
+*/
 void Robot::calcHeadRotation(glm::vec2 value){
   //We need to calculate the directional vector between the head center and the mouse.
   glm::vec3 head_pos = head.getPosition();

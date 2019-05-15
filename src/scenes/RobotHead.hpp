@@ -6,6 +6,21 @@ class AssetManager;
 class Texture;
 class Shader;
 
+/**
+\file RobotHead.hpp
+\brief Header file for RobotHead.cpp
+
+\author Christopher Arausa
+\version Final
+\date 05/14/2019
+*/
+
+/**
+\class RobotHead
+\brief This class contains all of the logic dealing with the head specifically.
+
+The head is kept as an independent entity to enable a slightly more diverse model with free rotational movement.
+*/
 class RobotHead : public QuaternionObject{
   private:
     GLint vPosition; ///< Shader position of vertex data.
@@ -21,9 +36,9 @@ class RobotHead : public QuaternionObject{
     std::vector<float> texture_uvs; ///< Vector containing our texture coordinates.
     GLuint uModel; ///< Shader uniform position of model matrix.
 
-    Texture* texture;
-    Shader* shader;
-    static constexpr float head_radius = 11.5;
+    Texture* texture; ///< The head's texture. 
+    Shader* shader; ///< Shader the head uses.
+    static constexpr float head_radius = 11.5; ///< Hard coded value for the radius of the image.
   public:
     RobotHead();
     ~RobotHead();
