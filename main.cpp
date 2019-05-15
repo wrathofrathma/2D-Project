@@ -17,8 +17,6 @@ void moveEvent(sf::Event::MouseMoveEvent event, Yuki *yu){
 		float delta_y = event.y - last_pos.y;
 		float x = delta_x * mouse_sensitivity.x;
 		float y = delta_y * mouse_sensitivity.y;
-		// if(yu->getActiveScene()->getCamera()->getType()==FREE)
-		// 	((OrthoCamera*)(yu->getActiveScene()->getCamera()))->rotate(glm::vec3(-x,-y, 0));
 	}
 	ui->setMousePos(sf::Vector2i(event.x, event.y));
 }

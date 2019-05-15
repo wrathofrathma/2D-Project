@@ -5,3 +5,4 @@
 # Let's avoid spaces because I'm lazy.
 
 Default Default.vs Default.fs
+Beam Default.vs Beam.fs

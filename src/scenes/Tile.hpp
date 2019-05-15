@@ -7,7 +7,21 @@
 class Texture;
 class Shader;
 
+/**
+\file Tile.hpp
+\brief Header file for Tile.cpp
 
+\author Christopher Arausa
+\date 5/14/2019
+\version Final
+*/
+
+/**
+\class Tile
+\brief The tile class represents every location in our world grid. Even empty space.
+
+Each one inherits the Quaternion object to deal with position.
+*/
 //Foreground terrain tiles
 class Tile : public QuaternionObject {
   private:
@@ -24,8 +38,8 @@ class Tile : public QuaternionObject {
     std::vector<float> texture_uvs; ///< Vector containing our texture coordinates.
     GLuint uModel; ///< Shader uniform position of model matrix.
 
-    std::map<std::string,Texture*> textures;
-    Shader* shader;
+    std::map<std::string,Texture*> textures; ///< The texture list of our tile if we wanted to do animations. 
+    Shader* shader; ///< The shader of our tile.
     std::string active_texture;
     bool useTexture; ///< Tracks whether we're using textures or just colors. Is used to set a uniform in our shader to toggle texure vs color rendering.
     bool active; ///< Is this tile active or air?

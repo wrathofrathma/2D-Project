@@ -15,6 +15,8 @@ uniform vec3 head_pos;
 uniform vec4 global_ambient;
 uniform bool use_lighting;
 uniform vec3 eye_pos;
+uniform bool use_headlight;
+
 void main()
 {
   if(use_texture){
@@ -53,7 +55,7 @@ void main()
     if(dist < ambient_radius){
      total+= radial_lighting*atten;
     }
-    if(dist < eye_radius){
+    if(use_headlight && dist < eye_radius){
       double angle = atan(frag_pos.y - eye_pos.y, frag_pos.x - eye_pos.x);
       if(angle<0)
         angle = (2*PI + angle);

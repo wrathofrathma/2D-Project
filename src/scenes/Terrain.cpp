@@ -2,9 +2,22 @@
 #include "../AssetManager.hpp"
 #include "../Utils/HeightGenerator.hpp"
 #include <random>
+#include <chrono>
+
+
+/**
+\brief Constructor
+
+This constructor generates the random seed for the world, initializes our tile IDs with world height restrictions, and sets up the empty tile
+\param am --- AssetManager class pointer.
+*/
 Terrain::Terrain(AssetManager *am){
   this->am = am;
-  seed = 22;
+  mt19937_64 ra;
+  ra.seed(std::chrono::system_clock::now().time_since_epoch().count());
+  uniform_int_distribution<unsigned int> gen(0,100000);
+  seed = gen(ra);
+
   if(am!=nullptr)
     init(am);
 
@@ -12,11 +25,17 @@ Terrain::Terrain(AssetManager *am){
   empty_tile.setID(-1);
 
   //Initialize our tile id possibilities.
-  TILE_BOUNDS.insert(std::make_pair(flesh, std::make_pair(0,20)));
+  TILE_BOUNDS.insert(std::make_pair(flesh, std::make_pair(0,15)));
   TILE_BOUNDS.insert(std::make_pair(rock, std::make_pair(0,int(WORLD_HEIGHT/2.0))));
   TILE_BOUNDS.insert(std::make_pair(grass, std::make_pair(0,WORLD_HEIGHT)));
 
 }
+
+/**
+\brief Initializes the world and tells us we're ready to generate the world and load textures.
+
+\param am --- AssetManager class pointer.
+*/
 void Terrain::init(AssetManager *am){
   this->am = am;
 
@@ -25,6 +44,10 @@ void Terrain::init(AssetManager *am){
   generate();
 
 }
+
+/**
+\brief This function loads in all textures needed for our tiles and associates them in a map with their ID as a key.
+*/
 void Terrain::loadTextures(){
   if(am!=nullptr){
     std::vector<Texture*> buffer;
@@ -46,6 +69,9 @@ void Terrain::loadTextures(){
 }
 
 
+/**
+\brief This function intializes a heightmap generator and generates the terrain based on our seed.
+*/
 void Terrain::generate(){
   std::mt19937_64 random_gen;
   random_gen.seed(seed);
@@ -105,9 +131,16 @@ void Terrain::generate(){
       }
     }
   }
-
 }
-//Returns all possible tiles at a given y value.
+
+
+/**
+\brief Returns all possible tiles at a given y value.
+
+This is used for terrain generation.
+
+\param y --- The integer y value find tiles for.
+*/
 std::vector<TILE_IDS> Terrain::getPossibleTiles(int y){
   std::vector<TILE_IDS> tile_ids;
   for(auto it = TILE_BOUNDS.begin(); it!=TILE_BOUNDS.end(); it++){
@@ -118,6 +151,11 @@ std::vector<TILE_IDS> Terrain::getPossibleTiles(int y){
   }
   return tile_ids;
 }
+
+/**
+\brief Draws all of the tiles in our terrain.
+\param delta --- Delta time since last draw.
+*/
 void Terrain::draw(float delta){
   for(WORLD_ROW wr : world){
     for(Tile tile : wr){
@@ -126,6 +164,11 @@ void Terrain::draw(float delta){
   }
 }
 
+/**
+\brief Deletes terrain at a specific location.
+
+\param x --- Integer location in tile coordinates.
+\param y --- Integer location in tile coordinates.
 void Terrain::deleteTile(int x, int y){
   if(x <0 || x >= WORLD_WIDTH)
     return;
@@ -135,13 +178,27 @@ void Terrain::deleteTile(int x, int y){
     world[y][x].setActive(false);
 }
 
+/**
+\brief Deletes terrain at a specific location.
+
+\param x --- float location in pixel/opengl coordinates.
+\param y --- float location in pixel/opengl coordinates.
+/*/
 Tile Terrain::getTileAtCoord(float x, float y){
+
   if(x/32 <0 || x/32 >= WORLD_WIDTH)
     return empty_tile;
   else if(y/32 < 0 || y/32>= WORLD_HEIGHT)
     return empty_tile;
   return world[y/32][x/32];
 }
+/**
+\brief Finds the tile at a given tile coordinate.
+
+Returns the found tile or the empty tile.
+\param x --- x location in tile coordinates.
+\param y --- y location in tile coordinates.
+*/
 Tile Terrain::getTile(int x, int y){
   if(x <0 || x >= WORLD_WIDTH)
     return empty_tile;

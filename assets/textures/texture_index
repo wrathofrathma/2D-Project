@@ -16,9 +16,24 @@ s o hidden1 hidden1.png
 s o hidden2 hidden2.png
 s o rock1 rock.png
 
-s a r_idle idle.png
+s a r_idle1 idle1.png
+s a r_idle2 idle2.png
+s a r_idle3 idle3.png
+
 s a r_move1 move1.png
 s a r_move2 move2.png
+s a r_move3 move3.png
+
+s a r_fall1 fall1.png
+s a r_fall2 fall2.png
+s a r_fall3 fall3.png
+
+s a r_jump1 jump1.png
+s a r_jump2 jump2.png
+s a r_jump3 jump3.png
+
 s a r_head head.png
 
 s o background SpaceBackground.jpg
+
+s o beam beam.png

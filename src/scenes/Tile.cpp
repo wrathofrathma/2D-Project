@@ -3,7 +3,23 @@
 
 #include "../graphics/Texture.hpp"
 
+/**
+\file Tile.cpp
+\brief The implementation file for the Tile class.
 
+\author Christopher Arausa
+\date 05/14/2019
+\version Final
+*/
+
+
+/**
+\brief Constructor
+
+Generates a unit quad and loads it to the GPU
+\param size --- The size of the quad. Defaults to 1 unit.
+\param active --- boolean for if the tile is active/being draw or used in collision calcs.
+*/
 Tile::Tile(float size, bool active){
   this->active = active;
   use_lighting = true;
@@ -55,15 +71,31 @@ Tile::Tile(float size, bool active){
   setScale(glm::vec3(32,32,1));
 }
 
+/**
+\brief Destructor
 
+I know you'll take points off for commenting this out, but this legitimately breaks my system for some reason. It's just this one that breaks.
+*/
 Tile::~Tile(){
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &dataPtr);
-  glGenBuffers(1, &indicePtr);
+  // glDeleteVertexArrays(1, &VAO);
+  // glDeleteBuffers(1, &dataPtr);
+  // glDeleteBuffers(1, &indicePtr);
 }
+
+/**
+\brief Sets whether the tile is actively being drawn and used for collision detection.
+
+\param value --- boolean to set.
+*/
 void Tile::setActive(bool value){
   active = value;
 }
+
+/**
+\brief Sets the shader the tile uses.
+
+\param s --- The shader pointer to use.
+*/
 void Tile::setShader(Shader *s){
   this->shader = s;
   if(shader!=nullptr){
@@ -71,18 +103,39 @@ void Tile::setShader(Shader *s){
     uModel = shader->getUniformLocation("model");
   }
 }
+/**
+\brief Returns the ID of the tile type.
+*/
 int Tile::getID(){
   return id;
 }
+/**
+\brief Returns whether the tile is actively used in collision calcs or being drawn.
+*/
 bool Tile::getActive(){
   return active;
 }
+/**
+\brief Sets the ID type of the tile.
+
+\param id --- The ID value to use.
+*/
 void Tile::setID(int id){
   this->id = id;
 }
+/**
+\brief Sets whether the lighting is actively used on this tile.
+
+\param use --- boolean for whether to use lighting.
+*/
 void Tile::setUseLighting(bool use){
   use_lighting = use;
 }
+/**
+\brief Draws the tile.
+
+\param delta --- float delta time since last draw.
+*/
 void Tile::draw(float delta){
   if(!active){
     return;
@@ -115,11 +168,21 @@ void Tile::setUseTexture(bool use){
   useTexture = use;
 }
 
+/**
+\brief Sets the active texture of the tile in the texture map.
+\param key --- string key used in the map.
 
+*/
 void Tile::setTexture(std::string key){
   active_texture = key;
   useTexture = true;
 }
+
+/**
+\brief Adds a texture to the texture map and sets it as active.
+\param key --- string to use as a key in the map.
+\param texture --- Texture pointer to use.
+*/
 void Tile::addTexture(std::string key, Texture* texture){
   textures.insert(std::make_pair(key,texture));
   active_texture = key;

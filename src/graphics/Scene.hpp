@@ -55,7 +55,7 @@ class Scene {
     virtual void updateShaders()=0;
     //Scene draw function.
     virtual void draw(float delta)=0;
-    virtual void resize(unsigned int w, unsigned int h);
+    void resize(unsigned int w, unsigned int h);
     //Functions that will determine how our scene handles input.
     virtual void keyPressedEventHandler(sf::Event::KeyEvent event);
     virtual void keyStateEventHandler();
