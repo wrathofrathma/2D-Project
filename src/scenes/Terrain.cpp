@@ -169,6 +169,7 @@ void Terrain::draw(float delta){
 
 \param x --- Integer location in tile coordinates.
 \param y --- Integer location in tile coordinates.
+*/
 void Terrain::deleteTile(int x, int y){
   if(x <0 || x >= WORLD_WIDTH)
     return;
