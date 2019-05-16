@@ -32,7 +32,7 @@ void main()
     vec4 total = vec4(0);
     vec4 radial_lighting = vec4(1);
     float ambient_radius = 8*32; /// 8 block sight radius
-    float eye_radius = 8*64;
+    float eye_radius = 8*128;
     vec3 head_diff = head_pos - frag_pos.xyz;
     //float dist = dot(head_diff, head_diff);
     float dist = length(head_pos - frag_pos.xyz);
@@ -48,7 +48,7 @@ void main()
     //If our distance from the head is within a certain radius, we illuminate the surrounding area so the user can see
     //As well as apply a spot light type effect with cutoffs within a certain angle.
     float PI = 3.14159265;
-    float cutoff = PI/24.0; //If we're within PI/6 of our eye, we're going to apply a spot light from the origin of the eye.
+    float cutoff = PI/4.0; //If we're within PI/6 of our eye, we're going to apply a spot light from the origin of the eye.
 
     vec4 eye_color = vec4(1,0,0,1);
 
@@ -60,7 +60,7 @@ void main()
       if(angle<0)
         angle = (2*PI + angle);
       if(abs(eye_angle - angle) < cos(cutoff))
-        FragColor += vec4(0.6,0,0,1);
+        FragColor += vec4(0.8,0.3,0.3,1);
     }
     FragColor = FragColor * total;
   }

@@ -23,7 +23,7 @@ This constructor sets up and initializes our scene with an orthographic camera, 
 */
 ProjectScene::ProjectScene(Yuki* yuki) : Scene(yuki){
   //Our global ambient is a sort of blue hue
-  global_ambient = glm::vec4(30.0/255.0, 44.0/255.0, 88.0/255.0, 1);
+  global_ambient = glm::vec4(20.0/255.0, 34.0/255.0, 78.0/255.0, 1);
   //Setting up the camera
   int x = yuki->ge->getSize().x;
   int y = yuki->ge->getSize().y;
