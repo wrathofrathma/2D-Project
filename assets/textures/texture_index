@@ -15,6 +15,13 @@ s o grass1 grass1.png
 s o hidden1 hidden1.png
 s o hidden2 hidden2.png
 s o rock1 rock.png
+s o stone1 stone1.png
+s o stone2 stone2.png
+s o stone3 stone3.png
+s o black1 black1.png
+s o black2 black2.png
+s o lava1 lava1.png
+s o lava2 lava2.png
 
 s a r_idle1 idle1.png
 s a r_idle2 idle2.png

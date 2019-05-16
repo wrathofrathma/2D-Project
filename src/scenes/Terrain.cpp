@@ -26,8 +26,10 @@ Terrain::Terrain(AssetManager *am){
 
   //Initialize our tile id possibilities.
   TILE_BOUNDS.insert(std::make_pair(flesh, std::make_pair(0,15)));
+  TILE_BOUNDS.insert(std::make_pair(grass, std::make_pair(WORLD_HEIGHT/2.0,WORLD_HEIGHT)));
   TILE_BOUNDS.insert(std::make_pair(rock, std::make_pair(0,int(WORLD_HEIGHT/2.0))));
-  TILE_BOUNDS.insert(std::make_pair(grass, std::make_pair(0,WORLD_HEIGHT)));
+  TILE_BOUNDS.insert(std::make_pair(lava, std::make_pair(0,2)));
+  TILE_BOUNDS.insert(std::make_pair(stone, std::make_pair(3,WORLD_HEIGHT/3)));
 
 }
 
@@ -51,20 +53,32 @@ void Terrain::init(AssetManager *am){
 void Terrain::loadTextures(){
   if(am!=nullptr){
     std::vector<Texture*> buffer;
-    buffer.push_back(am->getTexture("flesh1"));
-    buffer.push_back(am->getTexture("flesh2"));
-    buffer.push_back(am->getTexture("flesh3"));
-    buffer.push_back(am->getTexture("flesh4"));
-    buffer.push_back(am->getTexture("flesh5"));
-    textures.insert(std::make_pair(flesh, buffer));
 
-    buffer.clear();
+
     buffer.push_back(am->getTexture("grass1"));
     textures.insert(std::make_pair(grass, buffer));
 
     buffer.clear();
     buffer.push_back(am->getTexture("rock1"));
     textures.insert(std::make_pair(rock, buffer));
+    buffer.clear();
+
+    buffer.push_back(am->getTexture("stone1"));
+    buffer.push_back(am->getTexture("stone2"));
+    buffer.push_back(am->getTexture("stone3"));
+    textures.insert(std::make_pair(stone, buffer));
+    buffer.clear();
+
+    buffer.push_back(am->getTexture("lava1"));
+    buffer.push_back(am->getTexture("lava2"));
+    textures.insert(std::make_pair(lava, buffer));
+    buffer.clear();
+    buffer.push_back(am->getTexture("flesh1"));
+    buffer.push_back(am->getTexture("flesh2"));
+    buffer.push_back(am->getTexture("flesh3"));
+    buffer.push_back(am->getTexture("flesh4"));
+    buffer.push_back(am->getTexture("flesh5"));
+    textures.insert(std::make_pair(flesh, buffer));
   }
 }
 
@@ -122,6 +136,7 @@ void Terrain::generate(){
 
         std::uniform_int_distribution<int> tile_pick(0,tiles.size()-1);
         int tid = tile_pick(random_gen);
+        tid = tiles[tid];
         world[y][x].setID(tid);
         world[y][x].setActive(true);
         //Now let's generate a texture for this ID.
@@ -130,6 +145,7 @@ void Terrain::generate(){
         world[y][x].addTexture("t",textures[TILE_IDS(tid)][tex]);
       }
     }
+    tiles.clear();
   }
 }
 

@@ -26,7 +26,10 @@ class Texture;
 enum TILE_IDS{
   flesh=0,
   grass=1,
-  rock=2
+  rock=2,
+  stone=3,
+  lava=4,
+  black=5
 };
 
 
@@ -41,7 +44,7 @@ typedef std::vector<WORLD_ROW> World; ///< Each world Y value is a world row. So
 \brief The terrain class handles all terrain generation logic and world tile interaction logic.
 */
 class Terrain {
-    std::map<TILE_IDS, std::vector<Texture*>> textures; ///< Terrain textures mapped to their ID as a key. 
+    std::map<TILE_IDS, std::vector<Texture*>> textures; ///< Terrain textures mapped to their ID as a key.
     unsigned int seed; ///< The world seed.
     void loadTextures();
     AssetManager *am; ///< The asset manager class to retrieve textures from.
